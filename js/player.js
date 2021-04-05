@@ -1,5 +1,5 @@
 class Player {
-    constructor (ctx){
+    constructor (ctx, posX){
        this.ctx = ctx 
        this.playerPos = {
            x: posX,
@@ -13,11 +13,15 @@ class Player {
     }
 init(){
     this.imageInstance = new Image ()
-    this.imageInstance.src = ''
+    this.imageInstance.src = 'imagenes/sprite.png'
 }
 
 draw(){
     this.ctx.drawImage(this.imageInstance, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h)
+}
+
+moveRight(){
+    this.playerPos.x += 10
 }
 
 }

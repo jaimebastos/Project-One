@@ -8,6 +8,7 @@ const game = {
     ctx: undefined, 
     canvasSize: {w: undefined, h: undefined}, 
     player: undefined, 
+    FPS: 60,
 
 
     init(){
@@ -15,6 +16,7 @@ const game = {
         this.ctx = this.canvasDOM.getContext ('2d')
         this.setCanvasSize()
         this.draw()
+        this.drawAll()
     },
 
     setCanvasSize(){
@@ -26,8 +28,15 @@ const game = {
         this.canvasDOM.setAttribute ('height', this.canvasSize.h)
     },
 
+    drawAll(){
+        setInterval (() => {
+            this.clearScreen()
+
+        }, 1000/this.FPS)
+    },
+
     drawPlayer(){
-        this.player = new Player (this.ctx, 10, 200, 100, 100)
+        this.player = new Player(this.ctx, 10, 200, 100, 100)
     }
 
 
