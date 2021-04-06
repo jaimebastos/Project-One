@@ -22,7 +22,7 @@ class Background {
 
     init(){
     this.imageInstance = new Image ()
-    this.imageInstance.src = 'images/City1.png'
+    this.imageInstance.src = 'images/Background.jpg'
     }
 
     drawBackground(){

@@ -105,7 +105,7 @@ const game = {
     createCoin(){
         
         if (this.framesCounter % 190 === 0){
-        let newCoin =  new Coin(this.ctx, 50, 30, this.canvasSize.w, this.canvasSize.w) 
+        let newCoin =  new Coin(this.ctx, 30, 30, this.canvasSize.w, this.canvasSize.w) 
         this.coins.push(newCoin)
        //console.log(this.obstacles)
     }
@@ -119,7 +119,7 @@ const game = {
     createPlatform() {
 
         if (this.framesCounter % 160 === 0) {
-            let newPlatform = new Platform(this.ctx, 150, 60, this.canvasSize.w, this.canvasSize.w)
+            let newPlatform = new Platform(this.ctx, 150, 40, this.canvasSize.w, this.canvasSize.w)
             this.platforms.push(newPlatform)//(this.ctx, 100, 100, this.canvasSize.w, this.canvasSize.w, this.canvasSize.h - 120))
             console.log(this.platforms)
         }
@@ -193,7 +193,7 @@ const game = {
                     if (this.player.playerPos.y + this.player.playerSize.h > this.platforms[idx].platformPos.y) {
                         this.player.posY0 = this.platforms[idx].platformPos.y - this.player.playerSize.h
                         this.velY = 1
-                    }else if (this.player.playerPos.y < this.platforms[idx].platformPos.y + 60) {
+                    }else if (this.player.playerPos.y < this.platforms[idx].platformPos.y + 40) {
                         this.player.velY *= -1
                     } 
             }
@@ -222,7 +222,7 @@ returnToFloor() {
 
 gameOver() {
     clearInterval(this.interval)
-    this.clearScreen()
+    
     this.imageInstance = new Image(this.canvasSize.w, this.canvasSize.h)
     this.imageInstance.src = 'images/GameOver.jpg'
 },

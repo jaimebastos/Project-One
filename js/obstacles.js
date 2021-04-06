@@ -21,7 +21,7 @@ class Obstacle {
 
     init(){
     this.imageInstance = new Image ()
-    this.imageInstance.src = 'images/box.png'
+    this.imageInstance.src = 'images/spikeBox.png'
 }
 
     drawObstacle(){

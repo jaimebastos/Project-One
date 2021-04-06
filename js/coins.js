@@ -22,7 +22,7 @@ class Coin {
 
     init(){
     this.imageInstance = new Image ()
-    this.imageInstance.src = 'images/coin.png'
+    this.imageInstance.src = 'images/tuerca.png'
 }
 
     drawCoin(){
