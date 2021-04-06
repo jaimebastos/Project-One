@@ -12,9 +12,10 @@ class Coin {
 
          this.coinPos = {
            x: coinPosX,
-           y: Math.floor(Math.random() * 400) 
+           y: Math.floor(Math.random() * (400-250) + 250) 
         
        }
+
        this.init()
 
     }
@@ -33,7 +34,6 @@ class Coin {
     moveCoin(){
     this.coinPos.x -= 2
     }
-
   
     
 }

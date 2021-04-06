@@ -12,8 +12,6 @@ class Player {
            y: playerPosY
        }
 
-      
-
         this.playerSize = {
             w: playerWidth,
             h: playerHeight
@@ -21,21 +19,48 @@ class Player {
 
       this.posY0 = canvasSizeHeight - playerHeight - 20
 
+      this.imageInstance = undefined
+        
        this.velY = 1
        this.gravity = 0.4
+       
        this.init()
     
     }
 
 init(){
     this.imageInstance = new Image ()
-    this.imageInstance.src = 'images/sprite.png'
+    this.imageInstance.src = 'images/newSprite.png'
+    this.imageInstance.frames = 4
+    this.imageInstance.framesIndex = 0
 }
 
-draw(){
+draw(framesCounter){
     this.move()
-    this.ctx.drawImage(this.imageInstance, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h)
+
+    this.ctx.drawImage(
+        this.imageInstance,
+
+        this.imageInstance.framesIndex * Math.floor(this.imageInstance.width / this.imageInstance.frames), //comienza a cortar en X
+        0,  //comienza a cortar en Y
+           Math.floor( this.imageInstance.width/this.imageInstance.frames),//ancho que recorta
+            this.imageInstance.height,//alto que recorta
+        this.playerPos.x, 
+        this.playerPos.y, 
+        this.playerSize.w, 
+        this.playerSize.h)
+
+        this.animatePlayer(framesCounter)
 }
+
+animatePlayer(framesCounter) {
+        if (framesCounter % 5 == 0) {
+            this.imageInstance.framesIndex++;
+        }
+        if (this.imageInstance.framesIndex >= this.imageInstance.frames) {
+            this.imageInstance.framesIndex = 0;
+        }
+    }
 
 moveRight(){
 this.playerPos.x += 10

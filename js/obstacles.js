@@ -12,7 +12,7 @@ class Obstacle {
 
          this.obstaclePos = {
            x: obstaclePosX,
-           y: Math.floor(Math.random() * 400) 
+           y: Math.floor(Math.random() * (400 - 250) + 250)
         
        }
        this.init()
