@@ -7,7 +7,7 @@ class Background {
            h: backgroundSizeHeight
         }
 
-   this.velX = 2
+   this.velX = 4
 
     this.init()
 
@@ -29,7 +29,7 @@ class Background {
     this.ctx.drawImage(this.imageInstance, this.backgroundPos.x, this.backgroundPos.y, this.backgroundSize.w, this.backgroundSize.h)
     this.ctx.drawImage(this.imageInstance, this.backgroundPos.x + this.backgroundSize.w, this.backgroundPos.y, this.backgroundSize.w, this.backgroundSize.h)
     this.move()
-}
+    }
 
     move(){
         if(this.backgroundPos.x <= - this.backgroundSize.w) {

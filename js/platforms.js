@@ -1,5 +1,5 @@
 class Platform {
-    constructor(ctx, platformWidth, platformHeight, canvasSizeWidth, platformPosX) {
+    constructor(ctx, platformWidth, platformHeight, canvasSizeWidth, platformPosX, platformPosY) {
 
         this.ctx = ctx
 
@@ -12,7 +12,8 @@ class Platform {
 
         this.platformPos = {
             x: platformPosX,
-            y: Math.floor(Math.random() * (300 - 250) + 250)
+            y: platformPosY
+            //Math.floor(Math.random() * (300 - 250) + 250)
 
         }
         this.init()
@@ -31,7 +32,7 @@ class Platform {
 
 
     movePlatform() {
-        this.platformPos.x -= 2
+        this.platformPos.x -= 4
     }
 
 

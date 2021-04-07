@@ -63,8 +63,17 @@ animatePlayer(framesCounter) {
     }
 
 moveRight(){
-this.playerPos.x += 10
+this.playerPos.x += 15
 }
+
+moveLeft(){
+if(this.playerPos.x > 0){
+    this.playerPos.x -=15
+} else{
+    this.playerPos.x = 0
+}
+}
+
 
 move(){
     if (this.playerPos.y < this.posY0) {
@@ -77,8 +86,13 @@ move(){
 }
 
 jump(){
-    this.playerPos.y -= 50
-    this.velY -= 10
+    if(this.playerPos.y === this.posY0){
+    this.playerPos.y -= 20
+    this.velY -= 15 
+    } else {
+        return false
+    }
+
 }
 
 bend(){

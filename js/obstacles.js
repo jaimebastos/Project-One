@@ -1,5 +1,5 @@
 class Obstacle {
-    constructor (ctx, obstacleWidth, obstacleHeight, canvasSizeWidth, obstaclePosX){
+    constructor (ctx, obstacleWidth, obstacleHeight, canvasSizeWidth, obstaclePosX, obstaclePosY){
 
         this.ctx = ctx
 
@@ -12,7 +12,8 @@ class Obstacle {
 
          this.obstaclePos = {
            x: obstaclePosX,
-           y: Math.floor(Math.random() * (400 - 250) + 250)
+           y: obstaclePosY
+           //Math.floor(Math.random() * (400 - 250) + 250)
         
        }
        this.init()
@@ -31,7 +32,7 @@ class Obstacle {
 
 
     moveObstacle(){
-    this.obstaclePos.x -= 2
+    this.obstaclePos.x -= 4
     }
 
   

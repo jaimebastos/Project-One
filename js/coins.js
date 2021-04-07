@@ -32,7 +32,7 @@ class Coin {
 
 
     moveCoin(){
-    this.coinPos.x -= 2
+    this.coinPos.x -= 4
     }
   
     

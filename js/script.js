@@ -15,22 +15,49 @@ const game = {
     framesCounter: 0,
     FPS: 60,
     coinsWon: 0,
-    lives: 1,
+    lives: 3,
+    finishLine: undefined, 
+    gameFinished: false,
+    audio1: undefined,
 
 
     init(){
+
         this.canvasDOM = document.querySelector ('#canvas')
         this.ctx = this.canvasDOM.getContext ('2d')
         this.setCanvasSize()
-        this.drawAll()
+        //this.drawAll()
         this.createPlayer()
         this.createBackground()
         this.createObstacle()
         this.createPlatform()
-        this.setListeners()
-        
+        this.createFinishLine()
+        this.setListeners()  
+         
         
     },
+
+    start(){
+        this.reset()
+        this.drawAll()
+        this.createAudio()
+     
+    },
+
+    reset() {
+    this.background = new Background(this.ctx, this.canvasSize.w, this.canvasSize.h, 0, 0)
+    this.player = new Player(this.ctx, this.canvasSize.w, this.canvasSize.h, 60, 80, 50, 410)
+    this.obstacles = []
+    this.coins = []
+    this.platforms = []
+    this.lives = 3
+    this.coinsWon = 0
+    document.querySelector('.score span').innerHTML = this.coinsWon
+    document.querySelector('.lives span').innerHTML = this.lives
+    this.framesCounter = 0
+    this.finishLine = new Finish(this.ctx, 5000, 300)
+  },
+
 
     setCanvasSize(){
         this.canvasSize = {
@@ -47,19 +74,23 @@ const game = {
         this.interval = setInterval (() => {
 
             this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
-
+            
             this.clearScreen()
             this.createObstacle()
             this.createPlatform()
             this.createCoin()
             this.background.drawBackground()
+            this.finishLine.drawFinish()
 
             this.obstacles.forEach(elm =>elm.drawObstacle())
             this.clearObstacle()
+
             this.coins.forEach(elm =>elm.drawCoin())
             this.clearCoin()
+
             this.platforms.forEach(elm => elm.drawPlatform())
             this.clearPlatform()
+
             this.player.draw(this.framesCounter)
             if( this.collisionsBox() ){
                 if(this.lives > 0) {
@@ -67,14 +98,16 @@ const game = {
                 } else {
                     this.gameOver()
                     }
-                }
-            
-         
+            }
+
             this.collisionsCoins() ? this.winCoins() : null
             
             this.collisionsPlatform() 
 
+            this.collisionFinish() ? clearInterval(this.interval) : null
+
             this.returnToFloor()
+
 
 
         }, 1000/this.FPS)
@@ -84,59 +117,232 @@ const game = {
         this.background = new Background(this.ctx, this.canvasSize.w, this.canvasSize.h, 0, 0)
     },
 
+    
     createPlayer(){
         this.player = new Player(this.ctx, this.canvasSize.w, this.canvasSize.h, 60, 80, 50, 410)
     },
 
     createObstacle(){
-        
-        if (this.framesCounter % 170 === 0){
-        let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w) 
-        this.obstacles.push(newObstacle)//(this.ctx, 100, 100, this.canvasSize.w, this.canvasSize.w, this.canvasSize.h - 120))
-       //console.log(this.obstacles)
-    }
+        // if (this.framesCounter % 170 === 0){
+        // let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w) 
+        // this.obstacles.push(newObstacle)
+    // }
+        if (this.framesCounter === 12) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 85) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 80) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 200) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 290) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 320) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 350) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 420) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 500) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 520) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 650) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 300) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 750) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 830) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 340) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 900) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 1150) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 200) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 1300) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 1700) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 1780) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 1860) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
 
-    },
-
-    clearObstacle(){
-       this.obstacles = this.obstacles.filter(elm => elm.obstaclePos.x + elm.obstacleSize.w >= 0)
-    },
-
-    createCoin(){
-        
-        if (this.framesCounter % 190 === 0){
-        let newCoin =  new Coin(this.ctx, 30, 30, this.canvasSize.w, this.canvasSize.w) 
-        this.coins.push(newCoin)
-       //console.log(this.obstacles)
-    }
-
-    },
-
-    clearCoin(){
-       this.coins = this.coins.filter(elm => elm.coinPos.x + elm.coinSize.w >= 0)
-    },
-
-    createPlatform() {
-
-        if (this.framesCounter % 160 === 0) {
-            let newPlatform = new Platform(this.ctx, 150, 40, this.canvasSize.w, this.canvasSize.w)
-            this.platforms.push(newPlatform)//(this.ctx, 100, 100, this.canvasSize.w, this.canvasSize.w, this.canvasSize.h - 120))
-            console.log(this.platforms)
+        if (this.framesCounter === 2000) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 2012) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
+        }
+        if (this.framesCounter === 2024) {
+            let newObstacle =  new Obstacle(this.ctx, 80, 80, this.canvasSize.w, this.canvasSize.w, 400) 
+            this.obstacles.push(newObstacle)
         }
 
     },
+    
+    createCoin(){
+        if (this.framesCounter % 60 === 0){
+            let newCoin =  new Coin(this.ctx, 30, 30, this.canvasSize.w, this.canvasSize.w) 
+            this.coins.push(newCoin)  
+        }  
+    },
+    
+    clearObstacle(){
+        this.obstacles = this.obstacles.filter(elm => elm.obstaclePos.x + elm.obstacleSize.w >= 0)
+    },
+    
+    clearCoin(){
+        this.coins = this.coins.filter(elm => elm.coinPos.x + elm.coinSize.w >= 0)
+    },
+    
+    
+    createFinishLine(){
+        this.finishLine = new Finish(this.ctx, 5000, 300)
+    },
+    
+    drawFinishLine() {
+        this.framesCounter >= 1000 ? this.finishLine.drawFinish() : null
+    },
 
-    clearPlatform() {
+    collisionFinish(){
+        if(this.player.playerPos.x <= this.finishLine.finishPos.x + this.finishLine.finishSize.w &&
+            this.player.playerPos.x + this.player.playerSize.w >= this.finishLine.finishPos.x &&
+            this.player.playerPos.y <= this.finishLine.finishPos.y + this.finishLine.finishSize.h &&
+            this.player.playerSize.h + this.player.playerPos.y >= this.finishLine.finishPos.y){
+              return true  
+            }
+            
+            
+    },
+
+
+    createPlatform(){
+
+        if (this.framesCounter === 10) {
+            
+            let newPlatform = new Platform(this.ctx, 150, 40, this.canvasSize.w, this.canvasSize.w, 300)
+            this.platforms.push(newPlatform)
+            
+        }
+
+         if (this.framesCounter === 80) {
+            
+            let newPlatform = new Platform(this.ctx, 110, 40, this.canvasSize.w, this.canvasSize.w, 150)
+            this.platforms.push(newPlatform)  
+        }
+
+         if (this.framesCounter === 140) {
+            
+            let newPlatform = new Platform(this.ctx, 180, 40, this.canvasSize.w, this.canvasSize.w, 350)
+            this.platforms.push(newPlatform)
+        }
+
+         if (this.framesCounter === 600) {
+            
+            let newPlatform = new Platform(this.ctx, 130, 40, this.canvasSize.w, this.canvasSize.w, 250)
+            this.platforms.push(newPlatform)  
+        }
+
+         if (this.framesCounter === 700) {
+            
+            let newPlatform = new Platform(this.ctx, 180, 40, this.canvasSize.w, this.canvasSize.w, 350)
+            this.platforms.push(newPlatform)
+        }
+
+         if (this.framesCounter === 1000) {
+            
+            let newPlatform = new Platform(this.ctx, 100, 40, this.canvasSize.w, this.canvasSize.w, 350)
+            this.platforms.push(newPlatform)
+        }
+
+         if (this.framesCounter === 1100) {
+            
+            let newPlatform = new Platform(this.ctx, 70, 40, this.canvasSize.w, this.canvasSize.w, 250)
+            this.platforms.push(newPlatform)
+        }
+
+         if (this.framesCounter === 1200) {
+            
+            let newPlatform = new Platform(this.ctx, 190, 40, this.canvasSize.w, this.canvasSize.w, 150)
+            this.platforms.push(newPlatform)
+        }
+
+         if (this.framesCounter === 1400) {
+            
+            let newPlatform = new Platform(this.ctx, 60, 40, this.canvasSize.w, this.canvasSize.w, 350)
+            this.platforms.push(newPlatform)
+        }
+         if (this.framesCounter === 1450) {
+            
+            let newPlatform = new Platform(this.ctx, 130, 40, this.canvasSize.w, this.canvasSize.w, 350)
+            this.platforms.push(newPlatform)
+        }
+         if (this.framesCounter === 1500) {
+            
+            let newPlatform = new Platform(this.ctx, 200, 40, this.canvasSize.w, this.canvasSize.w, 350)
+            this.platforms.push(newPlatform)
+        }
+         if (this.framesCounter === 1600) {
+            
+            let newPlatform = new Platform(this.ctx, 190, 40, this.canvasSize.w, this.canvasSize.w, 300)
+            this.platforms.push(newPlatform)
+        }
+         if (this.framesCounter === 1650) {
+            
+            let newPlatform = new Platform(this.ctx, 70, 40, this.canvasSize.w, this.canvasSize.w, 150)
+            this.platforms.push(newPlatform)
+        }
+         if (this.framesCounter === 1700) {
+            
+            let newPlatform = new Platform(this.ctx, 70, 40, this.canvasSize.w, this.canvasSize.w, 150)
+            this.platforms.push(newPlatform)
+        }
+
+
+    },
+
+    clearPlatform(){
         this.platforms = this.platforms.filter(elm => elm.platformPos.x + elm.platformSize.w >= 0)
     },
 
     clearScreen(){
         this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h)
     },
-
     setListeners(){
         document.onkeyup = e => {
         e.key === 'ArrowRight' ? this.player.moveRight() : null
+        e.key === 'ArrowLeft' ? this.player.moveLeft() : null
         e.key === 'ArrowUp' ? this.player.jump() : null
         e.key === 'ArrowDown' ? this.player.bend() : null
         }
@@ -189,11 +395,12 @@ const game = {
                 this.player.playerPos.y <= plat.platformPos.y + plat.platformSize.h &&
                 this.player.playerSize.h + this.player.playerPos.y >= plat.platformPos.y) {
                 
-                    
-                    if (this.player.playerPos.y + this.player.playerSize.h > this.platforms[idx].platformPos.y) {
+                    //pies player
+                    if (this.player.playerPos.y + this.player.playerSize.h >= this.platforms[idx].platformPos.y && this.player.playerPos.y < this.platforms[idx].platformPos.y) {
                         this.player.posY0 = this.platforms[idx].platformPos.y - this.player.playerSize.h
                         this.velY = 1
-                    }else if (this.player.playerPos.y < this.platforms[idx].platformPos.y + 40) {
+                    //cabeza player
+                    }else if (this.player.playerPos.y < this.platforms[idx].platformPos.y + 20) {
                         this.player.velY *= -1
                     } 
             }
@@ -210,24 +417,27 @@ returnToFloor() {
 },
 
 
-    winCoins() {
+ winCoins() {
         this.coinsWon += 20
         document.querySelector('.score span').innerHTML = this.coinsWon
     },
 
-    looseLives() {
+ looseLives() {
         this.lives -= 1
         document.querySelector('.lives span').innerHTML = this.lives
     },
 
 gameOver() {
     clearInterval(this.interval)
-    
-    this.imageInstance = new Image(this.canvasSize.w, this.canvasSize.h)
+    this.interval = undefined
+    this.imageInstance = new Image
     this.imageInstance.src = 'images/GameOver.jpg'
+    this.imageInstance.onload = () => this.ctx.drawImage(this.imageInstance, 0, 0, this.canvasSize.w, this.canvasSize.h)
 },
-endScreen() {
-    this.imageInstance = new Image(this.canvasSize.w, this.canvasSize.h)
-    this.imageInstance.src = 'images/GameOver.jpg'
+
+createAudio(){
+    this.audio1 = new Audio('audio/POL-building-the-future-short.wav')
+    this.audio1.play()
 }
+
 }
