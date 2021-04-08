@@ -18,8 +18,12 @@ const game = {
     lives: 3,
     finishLine: undefined, 
     gameFinished: false,
-    audio1: undefined,
-
+    audioBackground: undefined,
+    audioBox: undefined,
+    audioCoin: undefined,
+    audioGameOver: undefined,
+    audioWin: undefined,
+    specialCoin: undefined,
 
     init(){
 
@@ -32,6 +36,7 @@ const game = {
         this.createObstacle()
         this.createPlatform()
         this.createFinishLine()
+        //this.createSpecialCoin()
         this.setListeners()  
          
         
@@ -41,12 +46,15 @@ const game = {
         this.reset()
         this.drawAll()
         this.createAudio()
+        this.audioBackground.play()
+        this.audioBackground.volume = 0.05
      
     },
 
     reset() {
     this.background = new Background(this.ctx, this.canvasSize.w, this.canvasSize.h, 0, 0)
     this.player = new Player(this.ctx, this.canvasSize.w, this.canvasSize.h, 60, 80, 50, 410)
+    //this.specialCoin = new SpecialCoin(this.ctx, 40, 40, this.canvasSize.w, this.canvasSize.w, 100)
     this.obstacles = []
     this.coins = []
     this.platforms = []
@@ -79,8 +87,11 @@ const game = {
             this.createObstacle()
             this.createPlatform()
             this.createCoin()
+            this.createSpecialCoin()
+            
             this.background.drawBackground()
             this.finishLine.drawFinish()
+            if(this.specialCoin) this.specialCoin.drawSpecialCoin() 
 
             this.obstacles.forEach(elm =>elm.drawObstacle())
             this.clearObstacle()
@@ -95,16 +106,37 @@ const game = {
             if( this.collisionsBox() ){
                 if(this.lives > 0) {
                     this.looseLives()
+                    this.audioBox.play()
+                    this.audioBox.volume = 0.15
                 } else {
                     this.gameOver()
                     }
             }
 
-            this.collisionsCoins() ? this.winCoins() : null
+            if(this.collisionsCoins()) {
+                this.winCoins()
+                this.audioCoin.play()
+                this.audioCoin.volume = 0.15
+            }  
+
+            if (this.collisionSpecialCoin()) {
+                this.lives++
+                document.querySelector('.lives span').innerHTML = this.lives
+                this.audioCoin.play()
+                this.audioCoin.volume = 0.15
+            }
             
             this.collisionsPlatform() 
 
-            this.collisionFinish() ? clearInterval(this.interval) : null
+            if(this.collisionFinish()) {
+                this.audioWin.play()
+                this.audioWin.volume = 0.3
+                clearInterval(this.interval)
+                this.interval = undefined
+                this.clearScreen()
+                this.finalScreen()
+                
+            } 
 
             this.returnToFloor()
 
@@ -216,6 +248,12 @@ const game = {
             let newCoin =  new Coin(this.ctx, 30, 30, this.canvasSize.w, this.canvasSize.w) 
             this.coins.push(newCoin)  
         }  
+    },
+
+    createSpecialCoin() {
+        if(this.framesCounter === 1100) {
+            this.specialCoin = new SpecialCoin(this.ctx, 40, 40, this.canvasSize.w, this.canvasSize.w, 200)
+        }
     },
     
     clearObstacle(){
@@ -365,6 +403,24 @@ const game = {
     })
 },
 
+    collisionSpecialCoin() {
+
+        //JUGADOR VS MONEDA ESPECIAL
+        //existe special coin?
+        if(!this.specialCoin)  {
+            //si no existe no hay colision, fin
+            return false
+        }
+
+        if (this.player.playerPos.x <= this.specialCoin.specialCoinPos.x + this.specialCoin.specialCoinSize.w &&
+            this.player.playerPos.x + this.player.playerSize.w >= this.specialCoin.specialCoinPos.x &&
+            this.player.playerPos.y <= this.specialCoin.specialCoinPos.y + this.specialCoin.specialCoinSize.h &&
+            this.player.playerSize.h + this.player.playerPos.y >= this.specialCoin.specialCoinPos.y) {
+                    this.specialCoin = undefined
+                     return true
+                }
+    },
+
     collisionsCoins() {
 
         //JUGADOR VS MONEDAS
@@ -375,13 +431,12 @@ const game = {
                 this.player.playerPos.x + this.player.playerSize.w >= elm.coinPos.x &&
                 this.player.playerPos.y <= elm.coinPos.y + elm.coinSize.h &&
                 this.player.playerSize.h + this.player.playerPos.y >= elm.coinPos.y) {
-                    this.coins.splice(idx, 1)
-                     return true
-                }
-            
+                this.coins.splice(idx, 1)
+                return true
+            }
+
         })
     },
-
     
 
     collisionsPlatform() {
@@ -428,16 +483,50 @@ returnToFloor() {
     },
 
 gameOver() {
+    this.audioGameOver.play()
+    this.audioGameOver.volume = 0.3
     clearInterval(this.interval)
     this.interval = undefined
     this.imageInstance = new Image
     this.imageInstance.src = 'images/GameOver.jpg'
     this.imageInstance.onload = () => this.ctx.drawImage(this.imageInstance, 0, 0, this.canvasSize.w, this.canvasSize.h)
+
+},
+
+finalScreen() {
+    if (this.coinsWon <= 100) {
+        this.imageInstance = new Image
+        this.imageInstance.src = 'images/destroyed-auto.jpg'
+        this.imageInstance.onload = () => this.ctx.drawImage(this.imageInstance, 260, 150, 300, 200)
+        game.ctx.font = '100px VT323'
+        game.ctx.fillText('YOU WON!', 280, 100)
+        game.ctx.font = '80px VT323'
+        game.ctx.fillText('and this is your prize', 100, 400)
+    } else if (this.coinsWon > 100 && this.coinsWon < 300) {
+        this.imageInstance = new Image
+        this.imageInstance.src = 'images/normal car.jpg'
+        this.imageInstance.onload = () => this.ctx.drawImage(this.imageInstance, 260, 150, 300, 200)
+        game.ctx.font = '100px VT323'
+        game.ctx.fillText('YOU WON!', 280, 100)
+        game.ctx.font = '80px VT323'
+        game.ctx.fillText('and this is your prize', 100, 400)
+    } else if (this.coinsWon >= 300) {
+        this.imageInstance = new Image
+        this.imageInstance.src = 'images/greatcar.jpg'
+        this.imageInstance.onload = () => this.ctx.drawImage(this.imageInstance, 300, 150, 400, 200)
+        game.ctx.font = '100px VT323'
+        game.ctx.fillText('YOU WON!', 280, 100)
+        game.ctx.font = '80px VT323'
+        game.ctx.fillText('and this is your prize', 100, 400)
+    }
 },
 
 createAudio(){
-    this.audio1 = new Audio('audio/POL-building-the-future-short.wav')
-    this.audio1.play()
+    this.audioBackground = new Audio ('audio/POL-mad-chase-short.wav')
+    this.audioBox = new Audio('audio/button-10.wav')
+    this.audioCoin = new Audio('audio/magic-chime-01.wav')
+    this.audioGameOver = new Audio('audio/man-scream-03.wav')
+    this.audioWin = new Audio('audio/win.wav')
 }
 
 }
