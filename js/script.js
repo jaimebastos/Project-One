@@ -591,7 +591,7 @@ gameOver() {
 },
 
 finalScreen() {
-    if (this.coinsWon <= 100) {
+    if (this.coinsWon <= 200) {
         this.imageInstance = new Image
         this.imageInstance.src = 'images/destroyed-auto.jpg'
         this.imageInstance.onload = () => this.ctx.drawImage(this.imageInstance, 260, 150, 300, 200)
@@ -599,7 +599,7 @@ finalScreen() {
         game.ctx.fillText('YOU WON!', 280, 100)
         game.ctx.font = '80px VT323'
         game.ctx.fillText('and this is your prize', 100, 400)
-    } else if (this.coinsWon > 100 && this.coinsWon <= 300) {
+    } else if (this.coinsWon > 200 && this.coinsWon <= 400) {
         this.imageInstance = new Image
         this.imageInstance.src = 'images/normal car.jpg'
         this.imageInstance.onload = () => this.ctx.drawImage(this.imageInstance, 260, 150, 300, 200)
@@ -607,7 +607,7 @@ finalScreen() {
         game.ctx.fillText('YOU WON!', 280, 100)
         game.ctx.font = '80px VT323'
         game.ctx.fillText('and this is your prize', 100, 400)
-    } else if (this.coinsWon > 300) {
+    } else if (this.coinsWon > 400) {
         this.imageInstance = new Image
         this.imageInstance.src = 'images/greatcar.jpg'
         this.imageInstance.onload = () => this.ctx.drawImage(this.imageInstance, 300, 150, 400, 200)

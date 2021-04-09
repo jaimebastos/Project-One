@@ -6,7 +6,7 @@ class Bullets {
         this.playerPosY0 = playerPosY0
         this.playerHeight = playerHeight
         this.radius = 10
-        this.velX = 10
+        this.velX = 8
         this.velY = 1
         this.gravity = 1
         
